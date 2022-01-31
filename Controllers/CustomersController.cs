@@ -43,10 +43,9 @@ namespace LibApp.Controllers
         public IActionResult New()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
-            var viewModel = new CustomerFormViewModel
+            var viewModel = new CustomerFormViewModel()
             {
                 MembershipTypes = membershipTypes,
-                Customer = new Customer(),
             };
 
             return View("CustomerForm", viewModel);
@@ -61,9 +60,8 @@ namespace LibApp.Controllers
                 return NotFound();
             }
 
-            var viewModel = new CustomerFormViewModel
+            var viewModel = new CustomerFormViewModel(customer)
             {
-                Customer = customer,
                 MembershipTypes = _context.MembershipTypes.ToList(),
             };
 
@@ -71,13 +69,13 @@ namespace LibApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Save(Customer customer)
         {
             if(!ModelState.IsValid)
             {
-                var viewModel = new CustomerFormViewModel
+                var viewModel = new CustomerFormViewModel(customer)
                 {
-                    Customer = customer,
                     MembershipTypes = _context.MembershipTypes.ToList(),
                 };
 
