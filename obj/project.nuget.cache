@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "6jWCiauEuygI7/3X7m7N5F4q8SKEFTUxfyPm0cFVAfhzO5qdlK1kHQWn5iJP2OXZCejPWeeqlkfRRy2z+Gpkyg==",
+  "dgSpecHash": "yMjWeRT2z3u+qz4n9CAe2a/pBu7r4driio/mmcPPKLCJjErSoMl7GTQg9/YmsfnfYGKT9LyJSgzER/dLp8uxkw==",
   "success": true,
   "projectFilePath": "C:\\Users\\huber\\OneDrive\\Pulpit\\pajak\\LibApp\\LibApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\huber\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
+    "C:\\Users\\huber\\.nuget\\packages\\bootbox.js\\5.5.2\\bootbox.js.5.5.2.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\huber\\.nuget\\packages\\jquery\\1.12.4\\jquery.1.12.4.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.7\\microsoft.aspnet.webapi.client.5.2.7.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\microsoft.aspnet.webapi.core\\5.2.7\\microsoft.aspnet.webapi.core.5.2.7.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\5.0.9\\microsoft.aspnetcore.cryptography.internal.5.0.9.nupkg.sha512",

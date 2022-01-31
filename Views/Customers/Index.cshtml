@@ -49,16 +49,31 @@ else
     <script>
         $(document).ready(function () {
             $("#customers .js-delete").on("click", function () {
-                if (confirm("Confirm customer deletion?")) {
-                    var button = $(this);
-                    $.ajax({
-                        url: "/api/customers/" + $(this).attr("data-customer-id"),
-                        method: "DELETE",
-                        success: function () {
-                            button.parents("tr").remove();
+                var button = $(this);
+                bootbox.confirm({
+                    message: "Confirm customer deletion?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
                         }
-                    });
-                }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/customers/" + button.attr("data-customer-id"),
+                                method: "DELETE",
+                                success: function () {
+                                    button.parents("tr").remove();
+                                }
+                            });
+                        }
+                    }
+                });
             });
         });
     </script>
