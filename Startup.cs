@@ -32,6 +32,8 @@ namespace LibApp
                     Configuration.GetConnectionString("DefaultConnection"), options => options.EnableRetryOnFailure()));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
