@@ -24,16 +24,34 @@ namespace LibApp.Controllers.Api
         [HttpPost]
         public IActionResult CreateNewRental(NewRentalDto newRental)
         {
+            if(newRental.BookIds.Count == 0)
+            {
+                return BadRequest("Books list is empty");
+            }
+
             var customer = _context.Customers
                 .Include(c => c.MembershipType)
                 .Single(c => c.Id == newRental.CustomerId);
+
+            if(customer == null)
+            {
+                return BadRequest("Customer ID is invalid");
+            }
 
             var books = _context.Books
                 .Include(b => b.Genre)
                 .Where(b => newRental.BookIds.Contains(b.Id)).ToList();
 
+            if(books.Count != newRental.BookIds.Count)
+            {
+                return BadRequest("One or more Book IDs are invalid");
+            }
+
             foreach(var book in books)
             {
+                if (book.NumberAvailable == 0)
+                    return BadRequest("Book is not available");
+
                 book.NumberAvailable--;
                 var rental = new Rental()
                 {
