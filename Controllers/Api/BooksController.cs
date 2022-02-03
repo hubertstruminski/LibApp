@@ -2,13 +2,12 @@
 using LibApp.Data;
 using LibApp.Dtos;
 using LibApp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using System.Threading.Tasks;
 
 namespace LibApp.Controllers.Api
 {
