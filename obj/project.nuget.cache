@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9xB8z4y3NYVblbZX52+U5KEYIJFJppMZVhVsvNqDT4WN0CR1c6FoQBtEhGK9/gqCYLFoVuhvvsjT9hx/YdpIyQ==",
+  "dgSpecHash": "bh3faL/f7Rfos/bEHfzVc9/U8sU3/OCiUVp2NX9UcGx2EVwimu2sYD5R1gNTeisYJ7nNPctzirf9g6BcOMufbw==",
   "success": true,
   "projectFilePath": "C:\\Users\\huber\\OneDrive\\Pulpit\\pajak\\LibApp\\LibApp.csproj",
   "expectedPackageFiles": [
@@ -161,6 +161,7 @@
     "C:\\Users\\huber\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\huber\\.nuget\\packages\\toastr\\2.1.1\\toastr.2.1.1.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\twitter.typeahead\\0.11.1\\twitter.typeahead.0.11.1.nupkg.sha512"
   ],
   "logs": [

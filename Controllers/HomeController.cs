@@ -1,5 +1,6 @@
 ﻿using LibApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,33 @@ namespace LibApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMemoryCache _memoryCache;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
             _logger = logger;
+            _memoryCache = memoryCache;
         }
 
         public IActionResult Index()
         {
-            return View();
+            DateTime currentTime;
+            bool existsInCache = _memoryCache.TryGetValue("CachedTime", out currentTime);
+
+            if(!existsInCache)
+            {
+                currentTime = DateTime.Now;
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpiration = DateTime.Now.AddSeconds(5),
+                    Priority = CacheItemPriority.High,
+                    SlidingExpiration = TimeSpan.FromSeconds(5),
+                };
+
+                _memoryCache.Set("CachedTime", currentTime, cacheEntryOptions);
+            }
+
+            return View(currentTime);
         }
 
         public IActionResult Privacy()

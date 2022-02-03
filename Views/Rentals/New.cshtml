@@ -87,10 +87,17 @@
                     dataType: "html",
                     data: postData,
                     success: function () {
-                        console.log("Success");
+                        toastr.success("Rental added");
+                        $("#customer").typeahead("val", "");
+                        $("#book").typeahead("val", "");
+                        $("#books").empty();
+                        formData = {
+                            customerId: 0,
+                            bookIds: []
+                        }
                     },
                     fail: function () {
-                        console.log("Failure: " + postData);
+                        toastr.fail("Rental failed");
                     }
                 })
             });
