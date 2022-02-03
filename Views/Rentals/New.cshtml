@@ -12,8 +12,12 @@
     </div>
     <div class="form-group">
         <label>Book</label>
-        <input type="text" value="" class="form-control" />
+        <input id="book" type="text" value="" class="form-control" />
     </div>
+
+    <ul id="books" class="list-group">
+
+    </ul>
 
     <button class="btn btn-primary">Submit</button>
 </form>
@@ -21,7 +25,10 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            var formData = {};
+            var formData = {
+                customerId: 0,
+                bookIds: []
+            };
             var customers = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -44,6 +51,32 @@
             ).on("typeahead:select", function (e, customer) {
                 formData.customerId = customer.id;
                 console.log("customer id: " + formData.customerId);
+            });
+
+            var books = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/books?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#book').typeahead(
+                {
+                    minLength: 3,
+                    highlight: true
+                },
+                {
+                    name: 'books',
+                    display: 'name',
+                    source: books
+                }
+            ).on("typeahead:select", function (e, book) {
+                $("#books").append("<li>" + book.name + "</li>");
+                $("#book").typeahead("val", "");
+                formData.bookIds.push(book.id);
+                console.log("book id: " + formData.bookIds[0]);
             });
         });
     </script>
