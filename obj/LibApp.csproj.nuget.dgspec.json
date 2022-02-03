@@ -79,6 +79,10 @@
             "jquery.datatables": {
               "target": "Package",
               "version": "[1.10.15, )"
+            },
+            "twitter.typeahead": {
+              "target": "Package",
+              "version": "[0.11.1, )"
             }
           },
           "imports": [

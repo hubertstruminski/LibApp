@@ -2538,6 +2538,12 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "Twitter.Typeahead/0.11.1": {
+        "type": "package",
+        "dependencies": {
+          "jQuery": "1.10.2"
+        }
       }
     }
   },
@@ -8662,6 +8668,23 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
+    },
+    "Twitter.Typeahead/0.11.1": {
+      "sha512": "rvLNWhljNZDvl/zFAghW/KlE0bRUzndkhMLxCoGkxph2h/kilGIIhqIXklcBH9S/gYeHTQ0VBnyiMk+6gPhhGw==",
+      "type": "package",
+      "path": "twitter.typeahead/0.11.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/Scripts/bloodhound.js",
+        "content/Scripts/bloodhound.min.js",
+        "content/Scripts/typeahead.bundle.js",
+        "content/Scripts/typeahead.bundle.min.js",
+        "content/Scripts/typeahead.jquery.js",
+        "content/Scripts/typeahead.jquery.min.js",
+        "twitter.typeahead.0.11.1.nupkg.sha512",
+        "twitter.typeahead.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -8675,7 +8698,8 @@
       "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 5.0.9",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.9",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.9",
-      "jquery.datatables >= 1.10.15"
+      "jquery.datatables >= 1.10.15",
+      "twitter.typeahead >= 0.11.1"
     ]
   },
   "packageFolders": {
@@ -8756,6 +8780,10 @@
           "jquery.datatables": {
             "target": "Package",
             "version": "[1.10.15, )"
+          },
+          "twitter.typeahead": {
+            "target": "Package",
+            "version": "[0.11.1, )"
           }
         },
         "imports": [

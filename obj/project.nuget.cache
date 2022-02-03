@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9nvTRJhvbxNEnk7xl/DvYCXeMdE4BfnRYYa3B1NWFqd79NCkIunYkRZesSpQV0DjycrJueZHwHHW0ZXiZxBpZw==",
+  "dgSpecHash": "9xB8z4y3NYVblbZX52+U5KEYIJFJppMZVhVsvNqDT4WN0CR1c6FoQBtEhGK9/gqCYLFoVuhvvsjT9hx/YdpIyQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\huber\\OneDrive\\Pulpit\\pajak\\LibApp\\LibApp.csproj",
   "expectedPackageFiles": [
@@ -160,7 +160,8 @@
     "C:\\Users\\huber\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\huber\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\huber\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    "C:\\Users\\huber\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\huber\\.nuget\\packages\\twitter.typeahead\\0.11.1\\twitter.typeahead.0.11.1.nupkg.sha512"
   ],
   "logs": [
     {
