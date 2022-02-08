@@ -19,11 +19,11 @@ namespace LibApp.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public ViewResult Index()
         {
-            var books = _context.Books.Include(b => b.Genre).ToList();
+            //var books = _context.Books.Include(b => b.Genre).ToList();
 
-            return View(books);
+            return View();
         }
 
         public IActionResult Details(int id)
@@ -56,6 +56,7 @@ namespace LibApp.Controllers
 
             var viewModel = new BookFormViewModel
             {
+                Book = new Book(),
                 Genres = genres,
             };
 
@@ -63,8 +64,20 @@ namespace LibApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Save(Book book)
         {
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new BookFormViewModel()
+                {
+                    Book = book,
+                    Genres = _context.Genre.ToList(),
+                };
+
+                return View("BookForm", viewModel);
+            }
+
             if (book.Id == 0)
             {
                 book.DateAdded = DateTime.Now;

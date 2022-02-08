@@ -9,7 +9,7 @@ namespace LibApp.Models
     public class Customer
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Please provide custome's name")]
+        [Required(ErrorMessage = "Please provide customer's name")]
         [StringLength(255)]
         public string Name { get; set; }
         public bool HasNewsletterSubscribed { get; set; }

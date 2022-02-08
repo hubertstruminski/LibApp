@@ -2,12 +2,14 @@
 using LibApp.Data;
 using LibApp.Dtos;
 using LibApp.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Web.Http;
+using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace LibApp.Controllers.Api
 {
@@ -23,19 +25,49 @@ namespace LibApp.Controllers.Api
             _context = context;
             _mapper = mapper;
         }
-        
-        // GET api/books
-        [HttpGet]
-        public IEnumerable<BookDto> GetBooks(string query = null)
-        {
-            var booksQuery = _context.Books.Where(b => b.NumberAvailable > 0);
 
-            if(!String.IsNullOrWhiteSpace(query))
+        [HttpGet]
+        public IActionResult GetBooks()
+        {
+            var books = _context
+                .Books
+                .Include(c => c.Genre)
+                .ToList()
+                .Select(_mapper.Map<Book, BookDto>);
+            return Ok(books);
+        }
+
+        [HttpDelete("{id}")]
+        public void DeleteBook(int id)
+        {
+            var bookInDb = _context.Books.SingleOrDefault(c => c.Id == id);
+            if(bookInDb == null)
             {
-                booksQuery = booksQuery.Where(b => b.Name.Contains(query));
+                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
             }
 
-            return booksQuery.ToList().Select(_mapper.Map<Book, BookDto>);
+            IEnumerable<Rental> rentals = _context.Rentals.Where(r => r.Book.Id == id);
+            foreach(var rental in rentals)
+            {
+                _context.Rentals.Remove(rental);
+            }
+
+            _context.Books.Remove(bookInDb);
+            _context.SaveChanges();
         }
+
+        // GET api/books
+        //[HttpGet]
+        //public IEnumerable<BookDto> GetBooks(string query = null)
+        //{
+        //    var booksQuery = _context.Books.Where(b => b.NumberAvailable > 0);
+
+        //    if(!String.IsNullOrWhiteSpace(query))
+        //    {
+        //        booksQuery = booksQuery.Where(b => b.Name.Contains(query));
+        //    }
+
+        //    return booksQuery.ToList().Select(_mapper.Map<Book, BookDto>);
+        //}
     }
 }
