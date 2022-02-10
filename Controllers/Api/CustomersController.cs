@@ -23,24 +23,30 @@ namespace LibApp.Controllers.Api
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private ApplicationDbContext _context;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public CustomersController(ApplicationDbContext context, IMapper mapper)
+        public CustomersController(ICustomerRepository customerRepository, IMapper mapper)
         {
-            _context = context;
+            _customerRepository = customerRepository;
             _mapper = mapper;
+        }
+
+        [HttpGet("{id}/details")]
+        public IActionResult GetCustomerDetails(int id)
+        {
+            var customer = _customerRepository.FindCustomerById(id);
+            return Redirect(new Uri("/customers/details/" + id, UriKind.Relative).ToString());
         }
 
         // GET /api/customers
         [HttpGet]
         public IActionResult GetCustomers()
         {
-            var customers = _context
-                .Customers
-                .Include(c => c.MembershipType)
-                .ToList()
+            var customers = _customerRepository
+                .GetAllCustomersWithMembershipType()
                 .Select(_mapper.Map<Customer, CustomerDto>);
+
             return Ok(customers);
         }
 
@@ -48,16 +54,12 @@ namespace LibApp.Controllers.Api
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomer(int id)
         {
-            Console.WriteLine("START REQUEST");
-            var customer = await _context.Customers.SingleOrDefaultAsync(c => c.Id == id);
-            await Task.Delay(2000);
+            var customer = await _customerRepository.GetCustomerByIdAsync(id);
 
             if (customer == null)
             {
                 return NotFound();
             }
-
-            Console.WriteLine("END REQUEST");
             return Ok(_mapper.Map<CustomerDto>(customer));
         }
 
@@ -70,8 +72,10 @@ namespace LibApp.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
             var customer = _mapper.Map<Customer>(customerDto);
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
+
+            _customerRepository.CreateCustomer(customer);
+            _customerRepository.SaveChanges();
+
             customerDto.Id = customer.Id;
 
             return customerDto;
@@ -86,28 +90,29 @@ namespace LibApp.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
-            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
+            var customerInDb = _customerRepository.GetCustomerById(id);
             if (customerInDb == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
             _mapper.Map(customerDto, customerInDb);
-            _context.SaveChanges();
+            // TUTAJ POWINIEN BYC _customerRepository.Update(obj); SPRAWDZIĆ!!!
+            _customerRepository.SaveChanges();
         }
 
         // DELETE /api/customers
         [HttpDelete("{id}")]
         public void DeleteCustomer(int id)
         {
-            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
+            var customerInDb = _customerRepository.GetCustomerById(id);
             if (customerInDb == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            _context.Customers.Remove(customerInDb);
-            _context.SaveChanges();
+            _customerRepository.RemoveCustomer(customerInDb);
+            _customerRepository.SaveChanges();
         } 
     }
 }

@@ -14,25 +14,30 @@ namespace LibApp.Controllers.Api
     [ApiController]
     public class NewRentalsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRentalRepository _rentalRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IBookRepository _bookRepository;
 
-        public NewRentalsController(ApplicationDbContext context)
+        public NewRentalsController(IRentalRepository rentalRepository, ICustomerRepository customerRepository, 
+            IBookRepository bookRepository)
         {
-            _context = context;
+            _rentalRepository = rentalRepository;
+            _customerRepository = customerRepository;
+            _bookRepository = bookRepository;
         }
 
         [HttpPost]
         public IActionResult CreateNewRental([FromBody] NewRentalDto newRental)
         {
-            var customer = _context.Customers
-                .Include(c => c.MembershipType)
+            var customer = _customerRepository
+                .GetAllCustomersWithMembershipType()
                 .Single(c => c.Id == newRental.CustomerId);
 
-            var books = _context.Books
-                .Include(b => b.Genre)
-                .Where(b => newRental.BookIds.Contains(b.Id)).ToList();
+            var books = _bookRepository
+                .GetAllBooksWithGenre()
+                .Where(b => newRental.BookIds.Contains(b.Id));
 
-            foreach(var book in books)
+            foreach (var book in books)
             {
                 if (book.NumberAvailable == 0)
                     return BadRequest("Book is not available");
@@ -44,9 +49,9 @@ namespace LibApp.Controllers.Api
                     Book = book,
                     DateRented = DateTime.Now,
                 };
-                _context.Rentals.Add(rental);
+                _rentalRepository.CreateRental(rental);
             }
-            _context.SaveChanges();
+            _customerRepository.SaveChanges();
 
             return Ok();
         }

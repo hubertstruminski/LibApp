@@ -35,7 +35,7 @@
                     {
                         data: "name",
                         render: function (data, type, customer) {
-                            return "<a href='customers/edit/" + customer.id + "'>" + customer.name + "</a>";
+                            return "<a data-customer-id=" + customer.id + " class='clicked'>" + customer.name + "</a>";
                         },
                     },
                     {
@@ -47,8 +47,28 @@
                             return "<button class='btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>"
                         }
                     }
-                ]
+                ],
+                drawCallback: function () {
+                    $(".clicked").each(function () {
+                        $(this).click(function () {
+                            console.log($(this).attr("data-customer-id"));
+                            var dataCustomerId = $(this).attr("data-customer-id");
+
+                            $.ajax({
+                                url: "/api/customers/" + $(this).attr("data-customer-id") + "/details",
+                                method: "GET",
+                                success: function (e, success) {
+                                    console.log("success");
+                                    console.log(e);
+                                    console.log("redirect:");
+                                    window.location.href = "/customers/details/" + dataCustomerId;
+                                }
+                            });
+                        });
+                    });
+                }
             });
+            
         });
     </script>
     <script>

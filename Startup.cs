@@ -30,6 +30,13 @@ namespace LibApp
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"), options => options.EnableRetryOnFailure()));
+           
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IRentalRepository, RentalRepository>();
+            
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

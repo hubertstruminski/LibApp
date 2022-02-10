@@ -12,12 +12,10 @@ namespace LibApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
+        public HomeController(IMemoryCache memoryCache)
         {
-            _logger = logger;
             _memoryCache = memoryCache;
         }
 

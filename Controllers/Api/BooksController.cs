@@ -17,43 +17,42 @@ namespace LibApp.Controllers.Api
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBookRepository _bookRepository;
+        private readonly IRentalRepository _rentalRepository;
         private readonly IMapper _mapper;
 
-        public BooksController(ApplicationDbContext context, IMapper mapper)
+        public BooksController(IBookRepository bookRepository, IRentalRepository rentalRepository, IMapper mapper)
         {
-            _context = context;
+            _bookRepository = bookRepository;
+            _rentalRepository = rentalRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetBooks()
         {
-            var books = _context
-                .Books
-                .Include(c => c.Genre)
-                .ToList()
-                .Select(_mapper.Map<Book, BookDto>);
+            var books = _bookRepository.GetAllBooksWithGenre().Select(_mapper.Map<Book, BookDto>);
+
             return Ok(books);
         }
 
         [HttpDelete("{id}")]
         public void DeleteBook(int id)
         {
-            var bookInDb = _context.Books.SingleOrDefault(c => c.Id == id);
+            var bookInDb = _bookRepository.GetBookById(id);
             if(bookInDb == null)
             {
                 throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
             }
 
-            IEnumerable<Rental> rentals = _context.Rentals.Where(r => r.Book.Id == id);
-            foreach(var rental in rentals)
+            IEnumerable<Rental> rentals = _rentalRepository.FindRentalsByBookId(id);
+            foreach (var rental in rentals)
             {
-                _context.Rentals.Remove(rental);
+                _rentalRepository.RemoveRental(rental);
             }
 
-            _context.Books.Remove(bookInDb);
-            _context.SaveChanges();
+            _bookRepository.RemoveBook(bookInDb);
+            _bookRepository.SaveChanges();
         }
 
         // GET api/books
