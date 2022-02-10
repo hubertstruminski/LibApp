@@ -5,5 +5,23 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Name</h2>
-<h2>/api/customers/@Model.Id/details</h2>
+<div class="row-container">
+    <h2>@Model.Name</h2>
+    <button id="editBtn" class="btn btn-warning button-space">Edit</button>
+</div>
+
+<ul>
+    <li>Newsletter subsribed: @(Model.HasNewsletterSubscribed ? "yes" : "no")</li>
+    <li>Membership type: @Model.MembershipType.Name</li>
+    <li>Birthdate: @Model.Birthdate.Value.ToString("dd.MM.yyyy")</li>
+</ul>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#editBtn").click(function () {
+                window.location.href = "/customers/edit/" + @Model.Id;
+            })
+        });
+    </script>
+}

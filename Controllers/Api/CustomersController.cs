@@ -35,8 +35,7 @@ namespace LibApp.Controllers.Api
         [HttpGet("{id}/details")]
         public IActionResult GetCustomerDetails(int id)
         {
-            var customer = _customerRepository.FindCustomerById(id);
-            return Redirect(new Uri("/customers/details/" + id, UriKind.Relative).ToString());
+            return Ok(id);
         }
 
         // GET /api/customers
