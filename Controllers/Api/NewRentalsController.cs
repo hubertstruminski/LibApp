@@ -1,6 +1,7 @@
 ﻿using LibApp.Data;
 using LibApp.Dtos;
 using LibApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,6 +28,7 @@ namespace LibApp.Controllers.Api
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateNewRental([FromBody] NewRentalDto newRental)
         {
             var customer = _customerRepository

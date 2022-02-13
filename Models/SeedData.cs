@@ -8,6 +8,25 @@ namespace LibApp.Models
 {
     public static class SeedData
     {
+        private static Role[] roles =
+        {
+            new Role
+            {
+                Id = 1,
+                Name = "User"
+            },
+            new Role
+            {
+                Id = 2,
+                Name = "StoreManager",
+            },
+            new Role
+            {
+                Id = 3,
+                Name = "Owner",
+            },
+        };
+
         private static Customer[] customers =
         {
             new Customer
@@ -17,6 +36,8 @@ namespace LibApp.Models
                     MembershipTypeId = 4,
                     HasNewsletterSubscribed = false,
                     Birthdate = new DateTime(1995, 12, 21),
+                    Email = "hubert.struminski@gmail.com",
+                    RoleId = roles[0].Id,
                 },
                 new Customer
                 {
@@ -25,6 +46,8 @@ namespace LibApp.Models
                     MembershipTypeId = 3,
                     HasNewsletterSubscribed = true,
                     Birthdate = new DateTime(2000, 3, 13),
+                    Email = "andrzej.kowalski@gmail.com",
+                    RoleId = roles[1].Id,
                 },
                 new Customer
                 {
@@ -33,6 +56,8 @@ namespace LibApp.Models
                     MembershipTypeId = 2,
                     HasNewsletterSubscribed = true,
                     Birthdate = new DateTime(1992, 9, 7),
+                    Email = "katarzyna.marek@gmail.com",
+                    RoleId = roles[0].Id,
                 },
         };
 
@@ -83,6 +108,16 @@ namespace LibApp.Models
                 executionStrategy.Execute(() => {
                     using (var transaction = context.Database.BeginTransaction())
                     {
+                        if(!context.Roles.Any())
+                        {
+                            AddRoles(context);
+                        }
+
+                        EnableIdentityInsert(context, "Roles");
+                        context.SaveChanges();
+
+                        DisableAllIdentityInsert(context);
+
                         if (!context.MembershipTypes.Any())
                         {
                             AddMembershipTypes(context);
@@ -146,6 +181,7 @@ namespace LibApp.Models
             DisableIdentityInsert(context, "Customers");
             DisableIdentityInsert(context, "Books");
             DisableIdentityInsert(context, "Rentals");
+            DisableIdentityInsert(context, "Roles");
         }
 
         public static void AddMembershipTypes(ApplicationDbContext context)
@@ -188,6 +224,11 @@ namespace LibApp.Models
         public static void AddCustomers(ApplicationDbContext context)
         {
             context.Customers.AddRange(customers);
+        }
+
+        public static void AddRoles(ApplicationDbContext context)
+        {
+            context.Roles.AddRange(roles);
         }
 
         public static void AddGenres(ApplicationDbContext context)

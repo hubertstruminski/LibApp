@@ -7,6 +7,7 @@ using LibApp.Models;
 using LibApp.ViewModels;
 using LibApp.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibApp.Controllers
 {
@@ -21,6 +22,7 @@ namespace LibApp.Controllers
             _genreRepository = genreRepository;
         }
 
+        [Authorize(Roles = "StoreManager")]
         public ViewResult Index()
         {
             return View();

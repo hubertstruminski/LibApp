@@ -5,10 +5,10 @@ using LibApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibApp.Controllers.Api
 {
@@ -41,7 +41,7 @@ namespace LibApp.Controllers.Api
             var bookInDb = _bookRepository.GetBookById(id);
             if(bookInDb == null)
             {
-                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
+                throw new System.Web.Http.HttpResponseException(System.Net.HttpStatusCode.NotFound);
             }
 
             IEnumerable<Rental> rentals = _rentalRepository.FindRentalsByBookId(id);
