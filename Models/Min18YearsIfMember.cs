@@ -8,16 +8,17 @@ namespace LibApp.Models
 {
     public class Min18YearsIfMember : ValidationAttribute
     {
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var customer = (Customer)validationContext.ObjectInstance;
-            if(customer.MembershipTypeId == MembershipType.Unkown ||
+            if (customer.MembershipTypeId == MembershipType.Unkown ||
                 customer.MembershipTypeId == MembershipType.PayAsYouGo)
             {
                 return ValidationResult.Success;
             }
-           
-            if(customer.Birthdate == null)
+
+            if (customer.Birthdate == null)
             {
                 return new ValidationResult("Birthdate is required");
             }

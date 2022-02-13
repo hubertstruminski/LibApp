@@ -53,8 +53,6 @@ namespace LibApp.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        //public string MembershipTypeId { get; set; }
-
         public IEnumerable<SelectListItem> MembershipTypes { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
@@ -72,6 +70,9 @@ namespace LibApp.Areas.Identity.Pages.Account
 
             [Required]
             public int MembershipTypeId { get; set; }
+
+            [Min18YearsToSubscribe]
+            public DateTime? Birthdate { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -92,19 +93,7 @@ namespace LibApp.Areas.Identity.Pages.Account
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        { 
-            //Console.WriteLine("XXX: " + Input.MembershipType.Name);
-
-            //var membershipType = Request.Form["membershipType"];
-            //var x = membershipType.ToString();
-            //var list = _membershipTypeRepository.GetAllMembershipTypes();
-            //var foundElement = list.Where(m => m.Id.ToString() == membershipType.ToString());
-            //var first = foundElement.First();
-
-            //Input.MembershipType = first;
-
-            //ModelState
-
+        {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
