@@ -3,24 +3,42 @@
 @inject UserManager<IdentityUser> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    @if (LibApp.Startup.IsLoggedIn)
+    {
+        <li class="nav-item">
+            <a id="nameContainer" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
 </ul>
+
+
+<script>
+    function fetchUserName() {
+        const splitCookie = document.cookie.split(";");
+        const index = splitCookie.findIndex(x => x.startsWith("Authorization"));
+        const authorizationCookie = splitCookie[index].split("=");
+        const jwtToken = authorizationCookie[1];
+        const decodedToken = JSON.parse(atob(jwtToken.split(".")[1]));
+
+        return decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+    }
+
+    if ("@LibApp.Startup.IsLoggedIn.ToString().ToLower()" === "true") {
+        const name = fetchUserName();
+        document.getElementById("nameContainer").textContent = name;
+    }
+</script>

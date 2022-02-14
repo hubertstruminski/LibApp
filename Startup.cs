@@ -27,6 +27,8 @@ namespace LibApp
 {
     public class Startup
     {
+        public static bool IsLoggedIn = false;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -64,11 +66,25 @@ namespace LibApp
                 options.AddPolicy("HasBirthdate", builder => builder.RequireClaim("Birthdate"));
             });
 
+            
             services.AddControllers().AddFluentValidation();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"), options => options.EnableRetryOnFailure()));
-           
+
+            //services.Configure<IdentityOptions>(options =>
+            //{
+            //    options.Password.RequireUppercase = false;
+            //    options.Password.RequireNonAlphanumeric = false;
+            //    options.Password.RequireLowercase = false;
+            //    options.Password.RequireUppercase = false;
+
+            //    options.SignIn.RequireConfirmedEmail = false;
+            //    options.SignIn.RequireConfirmedAccount = false;
+            //    options.SignIn.RequireConfirmedPhoneNumber = false;
+            //    options.Lockout.AllowedForNewUsers = false;
+            //});
+
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
             services.AddScoped<IBookRepository, BookRepository>();

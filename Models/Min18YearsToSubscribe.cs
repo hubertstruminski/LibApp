@@ -10,6 +10,11 @@ namespace LibApp.Models
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if(value == null)
+            {
+                return ValidationResult.Success;
+            }
+
             DateTime birthdate = (DateTime)value;
             birthdate = birthdate.AddYears(18);
 

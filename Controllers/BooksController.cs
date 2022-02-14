@@ -22,7 +22,6 @@ namespace LibApp.Controllers
             _genreRepository = genreRepository;
         }
 
-        [Authorize(Roles = "StoreManager")]
         public ViewResult Index()
         {
             return View();

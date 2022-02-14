@@ -27,6 +27,12 @@ namespace LibApp.Controllers.Api
             _mapper = mapper;
         }
 
+        [HttpGet("{id}/details")]
+        public IActionResult GetBookDetails(int id)
+        {
+            return Ok(id);
+        }
+
         [HttpGet]
         public IActionResult GetBooks()
         {

@@ -2,6 +2,7 @@
 using LibApp.Dtos;
 using LibApp.Exceptions;
 using LibApp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -97,6 +98,8 @@ namespace LibApp.Services
             );
 
             var tokenHandler = new JwtSecurityTokenHandler();
+
+            LibApp.Startup.IsLoggedIn = true;
 
             return tokenHandler.WriteToken(token);
         }

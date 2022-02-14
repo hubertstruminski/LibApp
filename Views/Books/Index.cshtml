@@ -6,7 +6,7 @@
 <h2>Books</h2>
 
 <p>
-    <a class="btn btn-primary" asp-action="New">New Book</a>
+    <a id="addBookBtn" class="btn btn-primary" asp-action="New">New Book</a>
 </p>
 
 <table id="books" class="table table-bordered table-hover">
@@ -14,7 +14,7 @@
         <tr>
             <th>Book</th>
             <th>Genre</th>
-            <th>Delete</th>
+            <th id="deleteColumn">Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -25,28 +25,54 @@
 {
     <script>
         $(document).ready(function () {
+            const userRole = fetchUserRole();
+
+            if (userRole === 'User') {
+                $("#deleteColumn ").css({ "display": "none" });
+                $("#addBookBtn").css({ "display": "none" });
+            }
+
+            const columns = [
+                {
+                    data: "name",
+                    render: function (data, type, book) {
+                        return "<span data-book-id=" + book.id + " class='clicked link-details'>" + book.name + "</span>";
+                    },
+                },
+                {
+                    data: "genre.name",
+                },
+            ];
+
+            if (userRole !== 'User') {
+                columns.push({
+                    data: "id",
+                    render: function (data) {
+                        return "<button class='btn btn-secondary js-delete' data-book-id=" + data + ">Delete</button>"
+                    }
+                });
+            }
+           
             $("#books").DataTable({
                 ajax: {
                     url: "/api/books",
                     dataSrc: "",
                 },
-                columns: [
-                    {
-                        data: "name",
-                        render: function (data, type, book) {
-                            return "<a href='books/edit/" + book.id + "'>" + book.name + "</a>";
-                        },
-                    },
-                    {
-                        data: "genre.name",
-                    },
-                    {
-                        data: "id",
-                        render: function (data) {
-                            return "<button class='btn btn-secondary js-delete' data-book-id=" + data + ">Delete</button>"
-                        }
-                    }
-                ]
+                columns: columns,
+                drawCallback: function () {
+                    $(".clicked").each(function () {
+                        $(this).addClass("link-details");
+                        $(this).click(function () {
+                            $.ajax({
+                                url: "/api/books/" + $(this).attr("data-book-id") + "/details",
+                                method: "GET",
+                                success: function (id) {
+                                    window.location = "/books/details/" + id;
+                                }
+                            });
+                        });
+                    });
+                }
             });
         });
     </script>

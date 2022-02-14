@@ -10,7 +10,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Rentals" asp-action="New">New Rental</a>
                         </li>
-                        <li class="nav-item">
+                        <li id="customers" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
                         </li>
                         <li class="nav-item">
@@ -21,3 +21,33 @@
                 </div>
             </div>
         </nav>
+
+<script>
+    function fetchUserRole() {
+        const splitCookie = document.cookie.split(";");
+        console.log(splitCookie);
+        const index = splitCookie.findIndex(x => x.startsWith("Authorization"));
+        const authorizationCookie = splitCookie[index].split("=");
+        const jwtToken = authorizationCookie[1];
+        const decodedToken = JSON.parse(atob(jwtToken.split(".")[1]));
+        console.log(decodedToken);
+
+        for (var key in decodedToken) {
+            console.log(key);
+            if (key.includes("role")) {
+                const userRole = decodedToken[key];
+                return userRole;
+            }
+        }
+
+        return null;
+    }
+
+    if ("@LibApp.Startup.IsLoggedIn.ToString().ToLower()" === "true") {
+        const userRole = fetchUserRole();
+
+        if (userRole === 'User') {
+            document.getElementById("customers").style.display = "none";
+        }
+    }
+</script>

@@ -5,17 +5,6 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-@{
-    if (@Model.DisplayConfirmAccountLink)
-    {
 <p>
     <span style="color: green;">Your account has been successfully created!</span> Please log in.
 </p>
-    }
-    else
-    {
-<p>
-        Please check your email to confirm your account.
-</p>
-    }
-}
