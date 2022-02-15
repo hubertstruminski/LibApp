@@ -43,18 +43,64 @@
         return null;
     }
 
-    if ("@LibApp.Startup.IsLoggedIn.ToString().ToLower()" === "true")
-    {
-        const userRole = fetchUserRole();
+    function fetchUserData(name) {
+        const splitCookie = document.cookie.split(";");
+        const index = splitCookie.findIndex(x => x.startsWith("Authorization"));
+        if (index !== -1) {
+            const authorizationCookie = splitCookie[index].split("=");
+            const jwtToken = authorizationCookie[1];
+            const decodedToken = JSON.parse(atob(jwtToken.split(".")[1]));
 
-        if (userRole === 'User') {
-            document.getElementById("customersNavBar").style.display = "none";
+            return decodedToken[name];
         }
+        return null;
+    }
+
+    function hideNavBarContent() {
+        $("#newRentalsNavBar").hide();
+        $("#customersNavBar").hide();
+        $("#booksNavBar").hide();
+    }
+
+    function showNavBarContent() {
+        $("#newRentalsNavBar").show();
+        $("#customersNavBar").show();
+        $("#booksNavBar").show();
+    }
+
+    const email2 = fetchUserData("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
+    if (email2 !== null) {
+        $.ajax({
+            method: "POST",
+            url: "/api/accounts/validate/" + email2,
+            success: function (result) {
+                if (result) {
+                    showNavBarContent();
+
+                    const userRole = fetchUserRole();
+
+                    if (userRole === 'User') {
+                        $("#customersNavBar").hide();
+                    }
+                }
+                else {
+                    hideNavBarContent();
+                }
+            },
+            error: function (result) {
+                hideNavBarContent();
+            }
+        });
+    } else {
+        hideNavBarContent();
+    }
+
+    @*if ("@LibApp.Startup.IsLoggedIn.ToString().ToLower()" === "true")
+    {
+        
     }
     else
     {
-        document.getElementById("newRentalsNavBar").style.display = "none";
-        document.getElementById("customersNavBar").style.display = "none";
-        document.getElementById("booksNavBar").style.display = "none";
-    }
+        
+    }*@
 </script>

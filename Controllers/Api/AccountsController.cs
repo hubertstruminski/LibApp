@@ -1,6 +1,8 @@
-﻿using LibApp.Dtos;
+﻿using LibApp.Data;
+using LibApp.Dtos;
 using LibApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace LibApp.Controllers.Api
 {
@@ -9,10 +11,12 @@ namespace LibApp.Controllers.Api
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly ICustomerRepository _customerRepository;
 
-        public AccountsController(IAccountService accountService)
+        public AccountsController(IAccountService accountService, ICustomerRepository customerRepository)
         {
             _accountService = accountService;
+            _customerRepository = customerRepository;
         }
 
         [HttpPost("register")]
@@ -27,6 +31,21 @@ namespace LibApp.Controllers.Api
         {
             string token = _accountService.GenerateJWT(loginDto);
             return Ok(token);
+        }
+
+        [HttpPost("validate/{email}")]
+        public ActionResult ValidateJWTToken(string email)
+        {
+            var customer = _customerRepository.GetAllCustomersWithMembershipType()
+                .Where(c => c.Email == email)
+                .FirstOrDefault();
+
+            if(customer == null)
+            {
+                return Ok(false);
+            }
+
+            return Ok(true);
         }
     }
 }

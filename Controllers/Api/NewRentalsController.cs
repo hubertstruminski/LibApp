@@ -28,7 +28,6 @@ namespace LibApp.Controllers.Api
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult CreateNewRental([FromBody] NewRentalDto newRental)
         {
             var customer = _customerRepository
