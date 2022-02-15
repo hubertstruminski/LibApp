@@ -90,6 +90,7 @@ namespace LibApp
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<IRentalRepository, RentalRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();

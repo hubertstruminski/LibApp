@@ -24,11 +24,16 @@ namespace LibApp.Controllers.Api
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IRoleRepository _roleRepository;
+        private IRentalRepository _rentalRepository;
         private readonly IMapper _mapper;
 
-        public CustomersController(ICustomerRepository customerRepository, IMapper mapper)
+        public CustomersController(ICustomerRepository customerRepository, IRoleRepository roleRepository,
+            IRentalRepository rentalRepository, IMapper mapper)
         {
             _customerRepository = customerRepository;
+            _roleRepository = roleRepository;
+            _rentalRepository = rentalRepository;
             _mapper = mapper;
         }
 
@@ -40,12 +45,26 @@ namespace LibApp.Controllers.Api
 
         // GET /api/customers
         [HttpGet]
-        public IActionResult GetCustomers()
+        public IActionResult GetCustomers([FromQuery(Name = "roleName")] string roleName)
         {
-            var customers = _customerRepository
+            IEnumerable<CustomerDto> customers = null;
+            if(roleName == "StoreManager")
+            {
+                Role role = _roleRepository.GetRoleByName("User");
+
+                if(role != null)
+                {
+                    customers = _customerRepository
+                        .GetAllCustomersWithMembershipType().Where(c => c.RoleId == role.Id)
+                        .Select(_mapper.Map<Customer, CustomerDto>);
+                }
+            }
+            else
+            {
+                customers = _customerRepository
                 .GetAllCustomersWithMembershipType()
                 .Select(_mapper.Map<Customer, CustomerDto>);
-
+            }
             return Ok(customers);
         }
 
@@ -108,6 +127,14 @@ namespace LibApp.Controllers.Api
             if (customerInDb == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            IEnumerable<Rental> rentals = _rentalRepository.FindRentalsByCustomerId(customerInDb.Id);
+
+            foreach(var rental in rentals)
+            {
+                _rentalRepository.RemoveRental(rental);
+                _customerRepository.SaveChanges();
             }
 
             _customerRepository.RemoveCustomer(customerInDb);

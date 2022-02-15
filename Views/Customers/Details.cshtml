@@ -11,14 +11,22 @@
 </div>
 
 <ul>
-    <li>Newsletter subsribed: @(Model.HasNewsletterSubscribed ? "yes" : "no")</li>
-    <li>Membership type: @Model.MembershipType.Name</li>
+    <li>E-mail: @Model.Email</li>
     <li>Birthdate: @Model.Birthdate.Value.ToString("dd.MM.yyyy")</li>
+    <li>Newsletter subsribed: @(Model.HasNewsletterSubscribed ? "yes" : "no")</li>
+    <li id="membershipType">Membership type: @Model.MembershipType.Name</li>
 </ul>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
+            const userRole = fetchUserRole();
+
+            if (userRole === 'StoreManager') {
+                $("#editBtn").css({ "display": "none" });
+                $("#membershipType").css({ "display": "none" });
+            }
+
             $("#editBtn").click(function () {
                 window.location.href = "/customers/edit/" + @Model.Id;
             });

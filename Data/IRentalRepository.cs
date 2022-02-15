@@ -13,5 +13,7 @@ namespace LibApp.Data
         void RemoveRental(Rental rental);
 
         void CreateRental(Rental rental);
+
+        IEnumerable<Rental> FindRentalsByCustomerId(int id);
     }
 }

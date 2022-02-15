@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LibApp.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +10,8 @@ namespace LibApp.Models
 {
     public static class SeedData
     {
+        private static readonly IPasswordHasher<Customer> _passwordHasher = new PasswordHasher<Customer>();
+
         private static Role[] roles =
         {
             new Role
@@ -38,6 +42,7 @@ namespace LibApp.Models
                     Birthdate = new DateTime(1995, 12, 21),
                     Email = "hubert.struminski@gmail.com",
                     RoleId = roles[0].Id,
+                    
                 },
                 new Customer
                 {
@@ -57,7 +62,7 @@ namespace LibApp.Models
                     HasNewsletterSubscribed = true,
                     Birthdate = new DateTime(1992, 9, 7),
                     Email = "katarzyna.marek@gmail.com",
-                    RoleId = roles[0].Id,
+                    RoleId = roles[2].Id,
                 },
         };
 
@@ -160,6 +165,8 @@ namespace LibApp.Models
 
                         DisableIdentityInsert(context, "Customers");
                         DisableIdentityInsert(context, "Books");
+
+                        UpdateCustomerPassword(context);
                         transaction.Commit();
                     }
                 });
@@ -285,6 +292,19 @@ namespace LibApp.Models
                     DateReturned = null,
                 }
             );
+        }
+
+        public static void UpdateCustomerPassword(ApplicationDbContext context)
+        {
+            List<Customer> customers = context.Customers.ToList();
+
+            foreach(var customer in customers)
+            {
+                customer.PasswordHash = _passwordHasher.HashPassword(customer, "1234567890");
+
+                context.Update(customer);
+                context.SaveChanges();
+            }
         }
     }
 }

@@ -7,13 +7,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        <li id="newRentalsNavBar" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Rentals" asp-action="New">New Rental</a>
                         </li>
-                        <li id="customers" class="nav-item">
+                        <li id="customersNavBar" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">Customers</a>
                         </li>
-                        <li class="nav-item">
+                        <li id="booksNavBar" class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Books</a>
                         </li>
                     </ul>
@@ -43,11 +43,18 @@
         return null;
     }
 
-    if ("@LibApp.Startup.IsLoggedIn.ToString().ToLower()" === "true") {
+    if ("@LibApp.Startup.IsLoggedIn.ToString().ToLower()" === "true")
+    {
         const userRole = fetchUserRole();
 
         if (userRole === 'User') {
-            document.getElementById("customers").style.display = "none";
+            document.getElementById("customersNavBar").style.display = "none";
         }
+    }
+    else
+    {
+        document.getElementById("newRentalsNavBar").style.display = "none";
+        document.getElementById("customersNavBar").style.display = "none";
+        document.getElementById("booksNavBar").style.display = "none";
     }
 </script>

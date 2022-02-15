@@ -6,7 +6,7 @@
 <h2>Customers</h2>
 
 <p>
-    <a class="btn btn-primary" asp-action="New">New Customer</a>
+    <a id="addCustomerBtn" class="btn btn-primary" asp-action="New">New Customer</a>
 </p>
 
     <table id="customers" class="table table-hover">
@@ -14,7 +14,7 @@
             <tr>
                 <th>Customer</th>
                 <th>Membership Type</th>
-                <th>Delete</th>
+                <th id="deleteColumn">Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -26,28 +26,40 @@
 {
     <script>
         $(document).ready(function () {
+            const userRole = fetchUserRole();
+
+            if (userRole === 'StoreManager') {
+                $("#deleteColumn ").css({ "display": "none" });
+                $("#addCustomerBtn").css({ "display": "none" });
+            }
+
+            const columns = [
+                {
+                    data: "name",
+                    render: function (data, type, customer) {
+                        return "<span data-customer-id=" + customer.id + " class='clicked link-details'>" + customer.name + "</span>";
+                    },
+                },
+                {
+                    data: "membershipType.name",
+                },
+            ];
+
+            if (userRole !== 'StoreManager') {
+                columns.push({
+                    data: "id",
+                    render: function (data) {
+                        return "<button class='btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>"
+                    }
+                });
+            }
+
             $("#customers").DataTable({
                 ajax: {
-                    url: "/api/customers",
+                    url: "/api/customers?roleName=" + userRole,
                     dataSrc: "",
                 },
-                columns: [
-                    {
-                        data: "name",
-                        render: function (data, type, customer) {
-                            return "<span data-customer-id=" + customer.id + " class='clicked link-details'>" + customer.name + "</span>";
-                        },
-                    },
-                    {
-                        data: "membershipType.name",
-                    },
-                    {
-                        data: "id",
-                        render: function (data) {
-                            return "<button class='btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>"
-                        }
-                    }
-                ],
+                columns: columns,
                 drawCallback: function () {
                     $(".clicked").each(function () {
                         $(this).addClass("link-details");
